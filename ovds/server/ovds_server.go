@@ -19,6 +19,7 @@ import (
     "database/sql"
     "fmt"
     _ "github.com/mattn/go-sqlite3"
+	"path/filepath"
 )
 
 type searchData_t struct { // searchData_t defined in vssparserutilities.h
@@ -64,11 +65,12 @@ func fileExists(filename string) bool {
 }
 
 func InitDb(dbFile string) {
-        doCreate := true
-	if fileExists(dbFile) {
+    doCreate := true
+	dbFilename := filepath.Join("db", dbFile)
+	if fileExists(dbFilename) {
 	    doCreate = false
 	}
-	db, dbErr = sql.Open("sqlite3", dbFile)
+	db, dbErr = sql.Open("sqlite3", dbFilename)
 	checkErr(dbErr)
 	if (doCreate) {
 		err := createStaticTables()
